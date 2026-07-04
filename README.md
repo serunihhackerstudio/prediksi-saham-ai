@@ -9,6 +9,12 @@
   <p><b>Prediksi Saham Berbasis Artificial Intelligence dengan Deep Learning & Real-time WebSockets</b></p>
 </div>
 
+<br>
+<div align="center">
+  <img src="preview.png" alt="Preview Aplikasi" width="800" style="border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" />
+</div>
+<br>
+
 <hr>
 
 ## ✨ Fitur Utama
