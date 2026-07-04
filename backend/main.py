@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -7,10 +8,13 @@ from ml import predict_stock
 
 app = FastAPI(title="Prediksi Saham API")
 
-# Enable CORS for the frontend
+# Enable CORS for the frontend (production-ready)
+allowed_origins_env = os.environ.get("ALLOWED_ORIGINS", "*")
+origins = [origin.strip() for origin in allowed_origins_env.split(",")] if allowed_origins_env != "*" else ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

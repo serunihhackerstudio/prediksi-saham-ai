@@ -14,10 +14,21 @@ np.random.seed(42)
 tf.random.set_seed(42)
 
 def predict_stock(ticker: str, days: int, epochs: int = 15, epoch_callback=None):
-    # 1. Ambil Data
-    df = yf.download(ticker, start="2020-01-01", progress=False)
-    if df.empty or len(df) < 100:
-        raise ValueError(f"Data tidak cukup atau ticker {ticker} tidak valid.")
+    import time
+    
+    # 1. Ambil Data dengan mekanisme Retry (karena Yahoo Finance kadang gagal)
+    df = None
+    for attempt in range(3):
+        df = yf.download(ticker, start="2020-01-01", progress=False)
+        if not df.empty:
+            break
+        time.sleep(1)
+        
+    if df.empty:
+        raise ValueError(f"Ticker {ticker} tidak valid atau jaringan gagal mengunduh data dari Yahoo Finance.")
+        
+    if len(df) < 100:
+        raise ValueError(f"Data historis tidak cukup (hanya {len(df)} hari). Minimal 100 hari dibutuhkan.")
 
     # 2. Preprocessing
     close_prices = df['Close'].values.reshape(-1, 1)
